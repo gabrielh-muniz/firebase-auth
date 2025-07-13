@@ -18,7 +18,7 @@ export default function App() {
       }
     }
     checkUserAuth();
-  }, [checkAuth]);
+  }, [checkAuth, isAuthenticated]);
 
   if (isCheckingAuth) return <div>Loading...</div>;
 

@@ -4,12 +4,14 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  authDomain: import.meta.env.VITE_FIREBASE_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
 };
 
@@ -45,6 +47,20 @@ export const useAuthStore = create((set) => {
           password
         );
         const user = userCredential.user;
+        const token = await user.getIdToken();
+        set({ user, token, isAuthenticated: true, isLoading: false });
+      } catch (error) {
+        set({ isLoading: false, error: error.message });
+        throw error;
+      }
+    },
+
+    loginWithGoogle: async () => {
+      set({ isLoading: true, error: null });
+      try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
         const token = await user.getIdToken();
         set({ user, token, isAuthenticated: true, isLoading: false });
       } catch (error) {

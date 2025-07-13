@@ -8,13 +8,22 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-  const { login, isLoading, error } = useAuthStore();
+  const { login, isLoading, error, loginWithGoogle } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     await login(email, password);
     navigate("/dashboard");
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Google login failed:", error.message);
+    }
   };
 
   return (
@@ -42,6 +51,9 @@ export default function LoginPage() {
           {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <button onClick={handleGoogleLogin} disabled={isLoading}>
+        {isLoading ? "Logging in ..." : "Login with Google"}
+      </button>
     </div>
   );
 }
