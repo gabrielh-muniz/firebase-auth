@@ -1,0 +1,25 @@
+{
+  "name": "firebase-app",
+  "version": "1.0.0",
+  "main": "backend/app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch backend/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrielh-muniz/firebase-auth.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gabrielh-muniz/firebase-auth/issues"
+  },
+  "homepage": "https://github.com/gabrielh-muniz/firebase-auth#readme",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0"
+  }
+}
