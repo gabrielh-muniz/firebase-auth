@@ -21,7 +21,6 @@ router.post("/register", verifyTokenId, verifyUserRole, async (req, res) => {
       [userRecord.uid, email, userRecord.displayName, ["admin"]]
     );
 
-    //TODO: send verification email
     const actionCodeSettings = {
       url: `${process.env.FRONTEND_URL}/login`, // redirect URL after verification (could be login page)
     };
