@@ -1,6 +1,7 @@
 import { config } from "dotenv";
 import express from "express";
 import { router as userRouter } from "./routes/authentication.js";
+import { query } from "./db/connection.js";
 
 config();
 
@@ -12,8 +13,9 @@ app.use(express.json());
 
 app.use("/api/auth", userRouter);
 
-app.get("/", (req, res) => {
-  res.send({ message: "Welcome to the Firebase Auth Backend!" });
+app.get("/", async (req, res) => {
+  const result = await query("SELECT NOW()");
+  res.send({ date: `${result.rows[0].now}` });
 });
 
 app.listen(PORT, () => {
