@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.use("/api/auth/", userRouter);
+app.use("/api/auth", userRouter);
 
 app.get("/", (req, res) => {
   res.send({ message: "Welcome to the Firebase Auth Backend!" });
