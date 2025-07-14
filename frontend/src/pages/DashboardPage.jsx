@@ -16,6 +16,7 @@ export default function DashboardPage() {
       <p>Welcome, {user ? user.email : "Guest"}!</p>
       <p>Your token: {user ? token : "No token available"}</p>
       <p>Id: {user ? user.uid : "No Id provided"}</p>
+      <p>Email verified: {user.emailVerified ? "True" : "False"}</p>
       <button onClick={handleLogout}>Logout</button>
     </div>
   );
