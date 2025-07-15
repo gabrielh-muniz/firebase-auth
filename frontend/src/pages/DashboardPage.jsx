@@ -1,6 +1,7 @@
 import { useAuthStore } from "../store/authStore.js";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { api } from "../api/axios.js";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -17,27 +18,35 @@ export default function DashboardPage() {
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
-
     try {
-      const res = await fetch("http://localhost:3000/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message);
-
+      const response = await api.post("/auth/register", { email, password });
+      if (!response.data) throw new Error("User creation failed");
       setMessage("User created successfully");
       setEmail("");
       setPassword("");
     } catch (error) {
       setMessage(error.message);
     }
+    // try {
+    //   const res = await fetch("http://localhost:3000/api/auth/register", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: `Bearer ${token}`,
+    //     },
+    //     body: JSON.stringify({ email, password }),
+    //   });
+
+    //   const data = await res.json();
+
+    //   if (!res.ok) throw new Error(data.message);
+
+    //   setMessage("User created successfully");
+    //   setEmail("");
+    //   setPassword("");
+    // } catch (error) {
+    //   setMessage(error.message);
+    // }
   };
 
   return (

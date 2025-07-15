@@ -21,7 +21,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 //Axios calls
-async function fetchIsAdmin(token) {
+async function fetchIsAdmin() {
   try {
     const response = await api.get("/auth/me");
 
@@ -55,18 +55,17 @@ export const useAuthStore = create((set) => {
   // Setup a listener for auth state changes
   onAuthStateChanged(auth, async (user) => {
     if (user) {
-      const token = await user.getIdToken();
-      const isAdmin = await fetchIsAdmin(token);
-      set({ user, token, isAuthenticated: true, isAdmin: isAdmin });
+      const isAdmin = await fetchIsAdmin();
+      set({ user, isAuthenticated: true, isAdmin: isAdmin });
     } else {
-      set({ user: null, token: null, isAuthenticated: false, isAdmin: false });
+      set({ user: null, isAuthenticated: false, isAdmin: false });
     }
   });
 
   return {
     user: null,
     isLoading: false,
-    token: null,
+    //token: null,
     isAuthenticated: false,
     isCheckingAuth: false,
     error: null,
@@ -81,14 +80,13 @@ export const useAuthStore = create((set) => {
           password
         );
         const user = userCredential.user;
-        const token = await user.getIdToken();
-        const isAdmin = await fetchIsAdmin(token);
+        const isAdmin = await fetchIsAdmin();
         set({
           user,
-          token,
+          //token,
           isAuthenticated: true,
           isLoading: false,
-          isAdmin: isAdmin,
+          //isAdmin: isAdmin,
         });
       } catch (error) {
         set({ isLoading: false, error: error.message });
@@ -115,11 +113,11 @@ export const useAuthStore = create((set) => {
       return new Promise((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, async (user) => {
           if (user) {
-            const token = await user.getIdToken();
-            const isAdmin = await fetchIsAdmin(token);
+            //const token = await user.getIdToken(true);
+            const isAdmin = await fetchIsAdmin();
             set({
               user,
-              token,
+              //token,
               isAuthenticated: true,
               isCheckingAuth: false,
               isAdmin: isAdmin,
@@ -127,7 +125,7 @@ export const useAuthStore = create((set) => {
           } else {
             set({
               user: null,
-              token: null,
+              //token: null,
               isAuthenticated: false,
               isCheckingAuth: false,
               isAdmin: false,
@@ -145,7 +143,7 @@ export const useAuthStore = create((set) => {
         await signOut(auth);
         set({
           user: null,
-          token: null,
+          //token: null,
           isAuthenticated: false,
           isLoading: false,
           isAdmin: false,
@@ -153,6 +151,17 @@ export const useAuthStore = create((set) => {
       } catch (error) {
         set({ isLoading: false, error: error.message });
         throw error;
+      }
+    },
+
+    fetchIsAdmin: async () => {
+      try {
+        const isAdmin = await fetchIsAdmin();
+        set({ isAdmin: isAdmin });
+        return isAdmin;
+      } catch (error) {
+        console.error("Error fetching admin status:", error);
+        return false;
       }
     },
   };
