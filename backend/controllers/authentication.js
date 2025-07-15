@@ -1,6 +1,7 @@
 import admin from "../config/firebase.js";
 import { query } from "../db/connection.js";
 import { catchError } from "../utils/errorHandler.js";
+import { resendEmailVerification } from "../services/email/resend.js";
 
 /**
  * Function to handle the user creating process
@@ -65,6 +66,15 @@ export async function createUser(req, res) {
   }
 
   //TODO: send this link via email to the user with Resend or any email service
+  const [errorSendEmail, emailData] = await catchError(
+    resendEmailVerification(email, password, verificationLink)
+  );
+  if (errorSendEmail) {
+    console.error("Email sending error:", errorSendEmail);
+    return res
+      .status(500)
+      .json({ message: "Failed to send verification email" });
+  }
 
   return res.status(201).json({
     message: "User registered successfully",
