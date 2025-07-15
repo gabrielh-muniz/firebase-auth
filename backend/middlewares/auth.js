@@ -17,15 +17,11 @@ export async function verifyTokenId(req, res, next) {
     console.error("Token verification error:", error);
     return res.status(401).json({ message: "Unauthorized" });
   }
+  // What if the token is invalid or expired?
+  // Force the refresh on the client side with getIdToken(true)
+
   req.user = decodedToken;
   next();
-  // try {
-  //   const decodedToken = await admin.auth().verifyIdToken(token);
-  //   req.user = decodedToken;
-  //   next();
-  // } catch (error) {
-  //   return res.status(401).json({ message: "Unauthorized" });
-  // }
 }
 
 export async function verifyUserRole(req, res, next) {

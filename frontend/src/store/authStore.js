@@ -8,7 +8,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { initializeApp } from "firebase/app";
-import axios from "axios";
+import { api } from "../api/axios.js";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -20,25 +20,36 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 
-// Axios calls
-const API_URL = "http://localhost:3000/api/auth";
-
+//Axios calls
 async function fetchIsAdmin(token) {
   try {
-    const res = await fetch(`${API_URL}/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get("/auth/me");
 
-    if (!res.ok) return false;
+    if (!response.data) return false;
 
-    const data = await res.json();
-    return data.isAdmin;
-  } catch {
+    return response.data.isAdmin;
+  } catch (error) {
     return false;
   }
 }
+
+// const API_URL = "http://localhost:3000/api/auth";
+// async function fetchIsAdmin(token) {
+//   try {
+//     const res = await fetch(`${API_URL}/me`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     if (!res.ok) return false;
+
+//     const data = await res.json();
+//     return data.isAdmin;
+//   } catch {
+//     return false;
+//   }
+// }
 
 export const useAuthStore = create((set) => {
   // Setup a listener for auth state changes
