@@ -38,6 +38,11 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
+        <div>
+          <button type="button" onClick={() => navigate("/forgot-password")}>
+            Forgot Password?
+          </button>
+        </div>
         <button type="submit" disabled={isLoading}>
           {isLoading ? "Logging in..." : "Login"}
         </button>

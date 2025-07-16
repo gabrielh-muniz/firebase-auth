@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import UserAuthControl from "./components/UserAuthControl.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import DashboardPage from "./pages/DashboardPage.jsx";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage.jsx";
 
 export default function App() {
   const { isAuthenticated, isCheckingAuth, checkAuth, logout, user } =
@@ -22,10 +23,6 @@ export default function App() {
 
   if (isCheckingAuth) return <div>Loading...</div>;
 
-  const handleLogout = async () => {
-    await logout();
-  };
-
   return (
     <Router>
       <Routes>
@@ -35,6 +32,14 @@ export default function App() {
           element={
             <UserAuthControl>
               <LoginPage />
+            </UserAuthControl>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <UserAuthControl>
+              <ForgotPasswordPage />
             </UserAuthControl>
           }
         />

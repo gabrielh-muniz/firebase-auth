@@ -65,7 +65,6 @@ export async function createUser(req, res) {
     console.error("Firebase verification link error:", errorVerificationLink);
   }
 
-  //TODO: send this link via email to the user with Resend or any email service
   const [errorSendEmail, emailData] = await catchError(
     resendEmailVerification(email, password, verificationLink)
   );
