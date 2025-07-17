@@ -159,7 +159,7 @@ export const useAuthStore = create((set) => {
       set({ isLoading: true, error: null });
       try {
         const actionCodeSettings = {
-          url: `${window.location.origin}/reset-password`,
+          url: `${window.location.origin}/login`,
           handleCodeInApp: true,
         };
         await sendPasswordResetEmail(auth, email, actionCodeSettings);
