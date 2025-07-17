@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  sendPasswordResetEmail,
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
@@ -148,6 +149,21 @@ export const useAuthStore = create((set) => {
           isLoading: false,
           isAdmin: false,
         });
+      } catch (error) {
+        set({ isLoading: false, error: error.message });
+        throw error;
+      }
+    },
+
+    sendPasswordResetEmail: async (email) => {
+      set({ isLoading: true, error: null });
+      try {
+        const actionCodeSettings = {
+          url: `${window.location.origin}/reset-password`,
+          handleCodeInApp: true,
+        };
+        await sendPasswordResetEmail(auth, email, actionCodeSettings);
+        set({ isLoading: false });
       } catch (error) {
         set({ isLoading: false, error: error.message });
         throw error;
