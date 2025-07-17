@@ -6,7 +6,11 @@ import { verifyTokenId, verifyUserRole } from "../middlewares/auth.js";
 export const router = Router();
 
 router.get("/users", verifyTokenId, verifyUserRole, async (req, res) => {
-  const [error, users] = await catchError(query("SELECT * FROM users"));
+  const { uid } = req.user;
+
+  const [error, users] = await catchError(
+    query("SELECT * FROM users WHERE uid != $1", [uid])
+  );
   if (error) {
     console.error("Database query error:", error);
     return res

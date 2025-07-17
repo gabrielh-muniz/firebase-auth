@@ -180,5 +180,17 @@ export const useAuthStore = create((set) => {
         return false;
       }
     },
+
+    getUsers: async () => {
+      set({ isLoading: true, error: null });
+      try {
+        const response = await api.get("/users");
+        set({ isLoading: false });
+        return response.data;
+      } catch (error) {
+        set({ isLoading: false, error: error.message });
+        throw error;
+      }
+    },
   };
 });

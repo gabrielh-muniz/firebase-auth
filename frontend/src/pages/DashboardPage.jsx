@@ -1,15 +1,16 @@
 import { useAuthStore } from "../store/authStore.js";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "../api/axios.js";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { user, logout, token, isAdmin } = useAuthStore();
+  const { user, logout, token, isAdmin, getUsers, isLoading } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [users, setUsers] = useState([]);
 
   const handleLogout = async () => {
     await logout();
@@ -49,6 +50,20 @@ export default function DashboardPage() {
     // }
   };
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const users = await getUsers();
+        console.log("Fetched users:", users);
+        setUsers(users);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, [getUsers]);
+
   return (
     <div>
       <h2>Dashboard</h2>
@@ -76,6 +91,26 @@ export default function DashboardPage() {
           <button type="submit">Create</button>
         </form>
       )}
+      <div>
+        {isLoading ? (
+          <p>Loading users...</p>
+        ) : (
+          <div>
+            <h3>Users List</h3>
+            {users.length > 0 ? (
+              <ul>
+                {users.map((user) => (
+                  <li key={user.uid}>
+                    {user.email} - {user.displayName || "No display name"}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No users found.</p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
